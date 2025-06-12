@@ -28,6 +28,10 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled true
+        manifestPlaceholders = [
+            applicationName: "io.supabase.flutter"
+        ]
     }
 
     buildTypes {
