@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:bookstore_app/core/constrants/db_tables.dart';
 import 'package:bookstore_app/modules/auth/model/user_model.dart';
 import 'package:either_dart/either.dart';
@@ -79,16 +80,22 @@ class AuthService {
     }
   }
 
-  /// Sign in with Google OAuth
   Future<Either<String, void>> signInWithGoogle() async {
     try {
-      log('message: Initiating Google sign-in');
+      final redirectUri =
+          Platform.isAndroid
+              ? 'com.example.bookstore_app://login-callback'
+              : 'http://localhost:3000/login-callback';
+
+      log('Initiating Google sign-in. Redirect: $redirectUri');
+
       await _supaBase.auth.signInWithOAuth(
         OAuthProvider.google,
-        redirectTo: 'io.supabase.flutter://login-callback',
+        redirectTo: redirectUri,
       );
-      log('message: User signed in with Google successfully');
-      return const Right(null); // Success with no data
+
+      log('User signed in with Google successfully');
+      return const Right(null);
     } catch (e) {
       log('Error during Google sign-in: $e');
       return const Left('Google sign-in failed. Please try again.');

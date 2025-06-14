@@ -10,6 +10,9 @@ void main() async {
   await Supabase.initialize(
     url: EnvService.supabaseUrl,
     anonKey: EnvService.supabaseAnonKey,
+    authOptions: FlutterAuthClientOptions(
+      authFlowType: AuthFlowType.pkce,
+    )
   );
 
   runApp(const Application());
