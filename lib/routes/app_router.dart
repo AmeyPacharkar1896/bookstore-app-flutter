@@ -19,5 +19,12 @@ final GoRouter appRouter = GoRouter(
       path: '/admin',
       builder: (context, state) => const AdminDashboard(),
     ),
+    GoRoute(
+      path: '/products/:id',
+      builder: (context, state) {
+        final productId = state.pathParameters['id'];
+        return ProductListPage(productId: productId!);
+      },
+    ),
   ],
 );

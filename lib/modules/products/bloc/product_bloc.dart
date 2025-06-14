@@ -40,7 +40,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     try {
       final product = await _productService.fetchProductById(event.productId);
       if (product != null) {
-        emit(ProductStateLoaded(products: [product]));
+        emit(ProductStateSingleLoaded(product: product)); // updated here
       } else {
         emit(ProductStateError(message: 'Product not found'));
       }

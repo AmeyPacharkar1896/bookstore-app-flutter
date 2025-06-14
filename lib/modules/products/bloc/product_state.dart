@@ -20,6 +20,15 @@ class ProductStateLoaded extends ProductState {
   List<Object> get props => [products];
 }
 
+class ProductStateSingleLoaded extends ProductState {
+  final ProductModel product;
+
+  const ProductStateSingleLoaded({required this.product});
+
+  @override
+  List<Object> get props => [product];
+}
+
 class ProductStateError extends ProductState {
   final String message;
 
