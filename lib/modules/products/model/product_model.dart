@@ -88,4 +88,32 @@ class ProductModel {
               : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'author': author,
+      'isbn': isbn,
+      'category': category,
+      'product_type': productType,
+      'price': price,
+      'sale_price': salePrice,
+      'stock_quantity': stockQuantity,
+      'description': description,
+      'publisher': publisher,
+      'publication_date': publicationDate?.toIso8601String(),
+      'pages': pages,
+      'language': language,
+      'active': active,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+      'cover_url': coverUrl,
+      'average_rating': averageRating,
+      'rating_count': ratingCount,
+      'tags': tags,
+      'slug': slug,
+      'deleted_at': deletedAt?.toIso8601String(),
+    };
+  }
 }

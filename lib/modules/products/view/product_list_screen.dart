@@ -1,4 +1,5 @@
 import 'package:bookstore_app/modules/products/bloc/product_bloc.dart';
+import 'package:bookstore_app/modules/products/controller/product_detail_controller.dart';
 import 'package:bookstore_app/modules/products/controller/product_list_controller.dart';
 import 'package:bookstore_app/modules/products/view/widgets/category_chip_row.dart';
 import 'package:bookstore_app/modules/products/view/widgets/product_card.dart';
@@ -15,7 +16,8 @@ class ProductListScreen extends StatefulWidget {
 }
 
 class _ProductListScreenState extends State<ProductListScreen> {
-  late ProductListController controller;
+  late ProductListController _productListController;
+  late ProductDetailController _productDetailController;
   bool _isSearching = false;
 
   final List<String> categories = [
@@ -29,12 +31,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   void initState() {
     super.initState();
-    controller = ProductListController(context: context);
+    _productListController = ProductListController(context: context);
+    _productDetailController = ProductDetailController(context: context);
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _productListController.dispose();
     super.dispose();
   }
 
@@ -43,23 +46,30 @@ class _ProductListScreenState extends State<ProductListScreen> {
     return Scaffold(
       appBar: SearchAppBar(
         isSearching: _isSearching,
-        controller: controller,
+        controller: _productListController,
         onToggleSearch: () {
           setState(() => _isSearching = !_isSearching);
-          if (!_isSearching) controller.onClearSearch();
+          if (!_isSearching) _productListController.onClearSearch();
         },
         onFilterSortPressed:
-            () =>
-                controller.onFilterSortPressed(context, () => setState(() {})),
+            () => _productListController.onFilterSortPressed(
+              context,
+              () => setState(() {}),
+            ),
       ),
-      drawer: ProductDrawer(onLogout: () => controller.logout(context)),
+      drawer: ProductDrawer(
+        onLogout: () => _productListController.logout(context),
+      ),
       body: Column(
         children: [
           CategoryChipsRow(
             categories: categories,
-            selectedCategory: controller.selectedCategory,
+            selectedCategory: _productListController.selectedCategory,
             onCategorySelected: (category) {
-              controller.onCategorySelected(category, () => setState(() {}));
+              _productListController.onCategorySelected(
+                category,
+                () => setState(() {}),
+              );
             },
           ),
           const SizedBox(height: 8),
@@ -76,7 +86,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                     return const Center(child: Text("No products found"));
                   }
                   return RefreshIndicator(
-                    onRefresh: () async => controller.fetchAll(),
+                    onRefresh: () async => _productListController.fetchAll(),
                     child: GridView.builder(
                       padding: const EdgeInsets.all(12),
                       gridDelegate:
@@ -88,8 +98,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           ),
                       itemCount: products.length,
                       itemBuilder:
-                          (context, index) =>
-                              ProductCard(product: products[index]),
+                          (context, index) => ProductCard(
+                            product: products[index],
+                            onAddToCart:
+                                () => _productDetailController.addToCart(
+                                  products[index],
+                                ),
+                          ),
                     ),
                   );
                 }

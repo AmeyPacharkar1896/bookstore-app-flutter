@@ -3,6 +3,7 @@ import 'package:bookstore_app/modules/products/bloc/product_bloc.dart';
 import 'package:bookstore_app/modules/products/controller/product_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
@@ -28,7 +29,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Book Details')),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => context.go('/home'),
+          icon: Icon(Icons.arrow_back),
+        ),
+        title: const Text('Book Details'),
+      ),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state is ProductStateLoading) {
@@ -111,7 +118,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: () => _controller.addToCart(product.id),
+                          onPressed: () => _controller.addToCart(product),
                           icon: const Icon(Icons.shopping_cart),
                           label: const Text('Add to Cart'),
                         ),

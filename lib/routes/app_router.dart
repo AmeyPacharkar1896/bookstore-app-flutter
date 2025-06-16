@@ -1,5 +1,6 @@
 import 'package:bookstore_app/modules/admin/view/admin_dashboard.dart';
 import 'package:bookstore_app/modules/auth/view/signup_screen.dart';
+import 'package:bookstore_app/modules/cart/view/cart_screen.dart';
 import 'package:bookstore_app/modules/products/view/product_list_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:bookstore_app/modules/auth/view/login_screen.dart';
@@ -25,6 +26,11 @@ final GoRouter appRouter = GoRouter(
         final productId = state.pathParameters['id'];
         return ProductListPage(productId: productId!);
       },
+    ),
+    GoRoute(
+      path: '/cart',
+      name: 'cart',
+      builder: (context, state) => const CartScreen(),
     ),
   ],
 );

@@ -4,7 +4,12 @@ import 'package:go_router/go_router.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
-  const ProductCard({super.key, required this.product});
+  final VoidCallback onAddToCart;
+  const ProductCard({
+    super.key,
+    required this.product,
+    required this.onAddToCart,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +78,7 @@ class ProductCard extends StatelessWidget {
                     ),
                     IconButton(
                       icon: const Icon(Icons.add_shopping_cart),
-                      onPressed: () {
-                        // TODO: Add to cart logic
-                      },
+                      onPressed: onAddToCart,
                     ),
                   ],
                 ),

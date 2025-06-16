@@ -1,4 +1,5 @@
 import 'package:bookstore_app/modules/auth/bloc/auth_bloc.dart';
+import 'package:bookstore_app/modules/cart/bloc/cart_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +10,10 @@ class GlobalProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider<AuthBloc>(create: (_) => AuthBloc())],
+      providers: [
+        BlocProvider<AuthBloc>(create: (_) => AuthBloc()),
+        BlocProvider<CartBloc>(create: (_) => CartBloc()),
+      ],
       child: child,
     );
   }
