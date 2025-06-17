@@ -52,49 +52,51 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(isSearching ? Icons.close : Icons.search),
           onPressed: onToggleSearch,
         ),
-        IconButton(
-          icon: const Icon(Icons.filter_list),
-          onPressed: onFilterSortPressed,
-        ),
-        BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            final itemCount = state.totalQuantity;
+        if (controller.showFilter)
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: onFilterSortPressed,
+          ),
+        if (controller.showCart)
+          BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              final itemCount = state.totalQuantity;
 
-            return Stack(
-              alignment: Alignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.shopping_cart_outlined),
-                  onPressed: () => context.go('/cart'),
-                ),
-                if (itemCount > 0)
-                  Positioned(
-                    right: 1,
-                    top: -2,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 20,
-                        minHeight: 20,
-                      ),
-                      child: Text(
-                        '$itemCount',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                    onPressed: () => context.go('/cart'),
+                  ),
+                  if (itemCount > 0)
+                    Positioned(
+                      right: 1,
+                      top: -2,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
                         ),
-                        textAlign: TextAlign.center,
+                        constraints: const BoxConstraints(
+                          minWidth: 20,
+                          minHeight: 20,
+                        ),
+                        child: Text(
+                          '$itemCount',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
-                  ),
-              ],
-            );
-          },
-        ),
+                ],
+              );
+            },
+          ),
       ],
     );
   }

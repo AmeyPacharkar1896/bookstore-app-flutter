@@ -19,6 +19,12 @@ class WishlistController implements SearchFilterController {
   @override
   String get title => 'Wishlist';
 
+  @override
+  bool get showFilter => false;
+
+  @override
+  bool get showCart => false;
+
   void addToCart(product) {
     context.read<CartBloc>().add(CartEventAdd(product: product));
   }

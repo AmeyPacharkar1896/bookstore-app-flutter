@@ -26,6 +26,12 @@ class ProductListController implements SearchFilterController {
   @override
   String get title => 'Bookstore';
 
+  @override
+  bool get showFilter => true;
+
+  @override
+  bool get showCart => true;
+
   void fetchAll() {
     context.read<ProductBloc>().add(ProductEventFetchAllProducts());
   }
