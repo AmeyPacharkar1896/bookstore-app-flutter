@@ -1,6 +1,7 @@
 import 'package:bookstore_app/core/theme/app_theme.dart';
 import 'package:bookstore_app/modules/products/bloc/product_bloc.dart';
 import 'package:bookstore_app/modules/products/controller/product_detail_controller.dart';
+import 'package:bookstore_app/modules/products/view/widgets/wishlist_icon_Button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +33,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.go('/home'),
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
         title: const Text('Book Details'),
       ),
@@ -55,7 +56,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             final product = state.product;
 
             return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(
+                16,
+                16,
+                16,
+                100,
+              ), // extra bottom padding
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -111,44 +117,52 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     style: textTheme.bodyLarge,
                   ),
 
-                  const SizedBox(height: 20),
-
-                  // Action Buttons
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () => _controller.addToCart(product),
-                          icon: const Icon(Icons.shopping_cart),
-                          label: const Text('Add to Cart'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      // OutlinedButton(
-                      //   onPressed: () => _controller.toggleWishList(product.id, product.isWished),
-                      //   child: Icon(product.isWished ? Icons.favorite : Icons.favorite_border),
-                      // ),
-                    ],
-                  ),
-
                   const SizedBox(height: 24),
 
-                  // Ratings & Reviews
+                  // Ratings & Reviews (if any)
                   // Text('Reviews', style: textTheme.titleMedium),
                   // const SizedBox(height: 12),
                   // for (final review in product.reviews)
-                  //   _buildReviewCard(
-                  //     context,
-                  //     reviewer: review.userName,
-                  //     comment: review.comment,
-                  //     rating: review.rating,
-                  //   ),
+                  //   _buildReviewCard(...),
                 ],
               ),
             );
           }
 
           return const SizedBox.shrink(); // fallback
+        },
+      ),
+
+      // ✅ Sticky Action Bar
+      bottomNavigationBar: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          if (state is! ProductStateSingleLoaded) {
+            return const SizedBox.shrink();
+          }
+          final product = state.product;
+
+          return SafeArea(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(top: BorderSide(color: Colors.grey.shade300)),
+              ),
+              child: Row(
+                children: [
+                  WishlistIconButton(productId: product.id),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => _controller.addToCart(product),
+                      icon: const Icon(Icons.shopping_cart),
+                      label: const Text('Add to Cart'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         },
       ),
     );

@@ -1,12 +1,12 @@
 import 'package:bookstore_app/modules/cart/bloc/cart_bloc.dart';
-import 'package:bookstore_app/modules/products/controller/product_list_controller.dart';
+import 'package:bookstore_app/modules/common/interfaces/search_filter_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isSearching;
-  final ProductListController controller;
+  final SearchFilterController controller;
   final VoidCallback onToggleSearch;
   final VoidCallback onFilterSortPressed;
 
@@ -27,24 +27,26 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       leading: Builder(
-        builder: (context) => IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => Scaffold.of(context).openDrawer(),
-        ),
+        builder:
+            (context) => IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
       ),
-      title: isSearching
-          ? TextField(
-              controller: controller.searchController,
-              autofocus: true,
-              style: theme.textTheme.bodyLarge,
-              decoration: InputDecoration(
-                hintText: 'Search books...',
-                hintStyle: theme.textTheme.bodyMedium,
-                border: InputBorder.none,
-              ),
-              onChanged: controller.onSearchChanged,
-            )
-          : const Text('Bookstore'),
+      title:
+          isSearching
+              ? TextField(
+                controller: controller.searchController,
+                autofocus: true,
+                style: theme.textTheme.bodyLarge,
+                decoration: InputDecoration(
+                  hintText: 'Search books...',
+                  hintStyle: theme.textTheme.bodyMedium,
+                  border: InputBorder.none,
+                ),
+                onChanged: controller.onSearchChanged,
+              )
+              : Text(controller.title),
       actions: [
         IconButton(
           icon: Icon(isSearching ? Icons.close : Icons.search),

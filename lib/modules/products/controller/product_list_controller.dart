@@ -1,14 +1,16 @@
 import 'dart:async';
 
 import 'package:bookstore_app/modules/auth/bloc/auth_bloc.dart';
+import 'package:bookstore_app/modules/common/interfaces/search_filter_controller.dart';
 import 'package:bookstore_app/modules/products/view/widgets/filter_sort_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore_app/modules/products/bloc/product_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class ProductListController {
+class ProductListController implements SearchFilterController {
   final BuildContext context;
+  @override
   final TextEditingController searchController = TextEditingController();
   Timer? _searchDebounce;
 
@@ -20,6 +22,9 @@ class ProductListController {
   ProductListController({required this.context}) {
     fetchAll();
   }
+
+  @override
+  String get title => 'Bookstore';
 
   void fetchAll() {
     context.read<ProductBloc>().add(ProductEventFetchAllProducts());
@@ -33,6 +38,7 @@ class ProductListController {
     );
   }
 
+  @override
   void onSearchChanged(String query) {
     _searchDebounce?.cancel();
     _searchDebounce = Timer(const Duration(milliseconds: 300), () {
@@ -51,6 +57,7 @@ class ProductListController {
     fetchAll();
   }
 
+  @override
   Future<void> onFilterSortPressed(
     BuildContext context,
     VoidCallback onUpdate,

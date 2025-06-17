@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bookstore_app/core/theme/app_theme.dart';
+import 'package:go_router/go_router.dart';
 
 class AppDrawer extends StatelessWidget {
   final VoidCallback onLogout;
@@ -26,23 +27,29 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.go('/home'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.favorite_border),
+            title: const Text('Wishlist'),
+            onTap: () => context.go('/wishlist'),
           ),
           ListTile(
             leading: const Icon(Icons.category),
             title: const Text('Categories'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.go('/categories'),
           ),
           ListTile(
             leading: const Icon(Icons.receipt_long),
             title: const Text('Orders'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.go('/orders'),
           ),
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('Account'),
-            onTap: () => Navigator.pop(context),
+            onTap: () => context.go('/account'),
           ),
+
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout),

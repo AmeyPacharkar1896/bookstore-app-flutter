@@ -1,9 +1,9 @@
 import 'package:bookstore_app/modules/products/bloc/product_bloc.dart';
 import 'package:bookstore_app/modules/products/controller/product_detail_controller.dart';
 import 'package:bookstore_app/modules/products/controller/product_list_controller.dart';
+import 'package:bookstore_app/modules/products/view/widgets/app_drawer.dart';
 import 'package:bookstore_app/modules/products/view/widgets/category_chip_row.dart';
 import 'package:bookstore_app/modules/products/view/widgets/product_card.dart';
-import 'package:bookstore_app/modules/products/view/widgets/product_drawer.dart';
 import 'package:bookstore_app/modules/products/view/widgets/search_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,9 +57,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
               () => setState(() {}),
             ),
       ),
-      drawer: ProductDrawer(
-        onLogout: () => _productListController.logout(context),
-      ),
+      drawer: AppDrawer(onLogout: () => _productListController.logout(context)),
       body: Column(
         children: [
           CategoryChipsRow(
