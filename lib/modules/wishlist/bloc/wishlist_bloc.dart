@@ -49,10 +49,8 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
         _wishlistIds.add(event.productId);
       }
 
+      // Instead of fetching again, reuse local _wishlistIds
       final wishedProducts = await _wishListService.fetchWishlistProducts();
-      _wishlistIds
-        ..clear()
-        ..addAll(wishedProducts.map((p) => p.id));
       emit(WishlistStateLoaded(products: wishedProducts));
     } catch (e) {
       emit(WishlistStateError(error: e.toString()));

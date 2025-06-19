@@ -37,4 +37,10 @@ class CartEventUpdateQuantity extends CartEvent {
 
 class CartEventClear extends CartEvent {}
 
-class CartEventCheckout extends CartEvent {}
+class CartEventCheckout extends CartEvent {
+  final List<CartItemModel> items;
+  const CartEventCheckout({required this.items});
+
+  @override
+  List<Object> get props => [items];
+}

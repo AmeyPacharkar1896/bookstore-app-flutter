@@ -11,6 +11,16 @@ class AppTheme {
   static const Color successGreen = Color(0xFF27AE60);
   static const Color errorRed = Color(0xFFE74C3C);
   static const Color warningAmber = Color(0xFFF39C12);
+  static const TextStyle totalAmountTextStyle = TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    color: inkBlack,
+  );
+  static const TextStyle sectionTitleStyle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: inkBlack,
+  );
 
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,

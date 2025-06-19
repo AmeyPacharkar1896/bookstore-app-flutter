@@ -1,3 +1,4 @@
+import 'package:bookstore_app/core/utils/snackbar_helper.dart';
 import 'package:bookstore_app/modules/cart/bloc/cart_bloc.dart';
 import 'package:bookstore_app/core/theme/app_theme.dart';
 import 'package:bookstore_app/modules/cart/controler/cart_controller.dart';
@@ -29,46 +30,64 @@ class CartScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete_sweep),
             tooltip: 'Clear Cart',
-            onPressed: () {
-              controller.clearCart();
-            },
+            onPressed: controller.clearCart,
           ),
         ],
       ),
-      body: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          final items = state.items;
 
-          if (items.isEmpty) {
-            return const Center(
-              child: Text(
-                'Your cart is empty.',
-                style: TextStyle(fontSize: 16, color: AppTheme.dustyGrey),
-              ),
+      /// BlocListener for SnackBar feedback
+      body: BlocListener<CartBloc, CartState>(
+        listener: (context, state) {
+          if (state is CartStateError) {
+            showSnackBar(
+              context,
+              message: state.message,
+              type: SnackbarType.error,
+            );
+          } else if (state.items.isEmpty) {
+            showSnackBar(
+              context,
+              message: 'Order placed successfully!',
+              type: SnackbarType.success,
             );
           }
-
-          final total = items.fold(0.0, (sum, item) => sum + item.totalPrice);
-
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(12),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return CartItemCard(item: item);
-                  },
-                ),
-              ),
-              CartSummary(
-                total: total,
-                onCheckout: () => controller.checkout(items),
-              ),
-            ],
-          );
         },
+
+        child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            final items = state.items;
+
+            if (items.isEmpty) {
+              return const Center(
+                child: Text(
+                  'Your cart is empty.',
+                  style: TextStyle(fontSize: 16, color: AppTheme.dustyGrey),
+                ),
+              );
+            }
+
+            final total = state.total;
+
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(12),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      return CartItemCard(item: item);
+                    },
+                  ),
+                ),
+                CartSummary(
+                  total: total,
+                  onCheckout: () => controller.checkout(items),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

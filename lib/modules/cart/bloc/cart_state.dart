@@ -5,10 +5,8 @@ class CartState {
 
   CartState({required this.items});
 
-  /// Total price of all items
   double get total => items.fold(0, (sum, item) => sum + item.totalPrice);
 
-  /// Total quantity of all items (for cart badge)
   int get totalQuantity => items.fold(0, (sum, item) => sum + item.quantity);
 
   CartState copyWith({List<CartItemModel>? items}) {
@@ -29,4 +27,9 @@ class CartState {
   Map<String, dynamic> toJson() {
     return {'items': items.map((item) => item.toJson()).toList()};
   }
+}
+
+class CartStateError extends CartState {
+  final String message;
+  CartStateError({required this.message, required super.items});
 }

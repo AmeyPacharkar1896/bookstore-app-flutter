@@ -1,8 +1,10 @@
 import 'package:bookstore_app/modules/cart/model/cart_item_model.dart';
+import 'package:bookstore_app/modules/cart/service/cart_service.dart';
 import 'package:bookstore_app/modules/products/model/product_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart'; // ← updated import
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -13,10 +15,10 @@ class CartBloc extends HydratedBloc<CartEvent, CartState> {
     on<CartEventRemove>(_onCartEventRemove);
     on<CartEventUpdateQuantity>(_onCartEventUpdateQuantity);
     on<CartEventClear>((_, emit) => emit(CartState(items: [])));
+    on<CartEventCheckout>(_onCartEventCheckout);
   }
 
   void _onCartEventAdd(CartEventAdd event, Emitter<CartState> emit) {
-    debugPrint('[CartBloc] Adding product: ${event.product.title}');
     final existing = state.items.firstWhere(
       (item) => item.product.id == event.product.id,
       orElse: () => CartItemModel(product: event.product, quantity: 0),
@@ -32,7 +34,6 @@ class CartBloc extends HydratedBloc<CartEvent, CartState> {
   }
 
   void _onCartEventRemove(CartEventRemove event, Emitter<CartState> emit) {
-    debugPrint('[CartBloc] Removing product: ${event.productId}');
     emit(
       state.copyWith(
         items:
@@ -47,9 +48,6 @@ class CartBloc extends HydratedBloc<CartEvent, CartState> {
     CartEventUpdateQuantity event,
     Emitter<CartState> emit,
   ) {
-    debugPrint(
-      '[CartBloc] Updating quantity for ${event.productId} to ${event.quantity}',
-    );
     final updatedItems =
         state.items.map((item) {
           return item.product.id == event.productId
@@ -60,7 +58,37 @@ class CartBloc extends HydratedBloc<CartEvent, CartState> {
     emit(state.copyWith(items: updatedItems));
   }
 
-  // 🟢 Required for persistence
+  Future<void> _onCartEventCheckout(
+    CartEventCheckout event,
+    Emitter<CartState> emit,
+  ) async {
+    final userId = Supabase.instance.client.auth.currentUser?.id;
+
+    if (userId == null) {
+      emit(
+        CartStateError(message: 'You must be logged in.', items: state.items),
+      );
+      return;
+    }
+
+    if (event.items.isEmpty) {
+      emit(CartStateError(message: 'Your cart is empty.', items: state.items));
+      return;
+    }
+
+    try {
+      await CartService().createOrder(userId: userId, items: event.items);
+      emit(CartState(items: []));
+    } catch (e) {
+      emit(
+        CartStateError(
+          message: e.toString().replaceAll('Exception: ', ''),
+          items: state.items,
+        ),
+      );
+    }
+  }
+
   @override
   CartState? fromJson(Map<String, dynamic> json) {
     try {

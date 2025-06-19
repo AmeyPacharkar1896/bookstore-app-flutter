@@ -23,6 +23,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _controller = ProductDetailController(context: context);
     _controller.fetchProduct(widget.productId);
+    
   }
 
   @override

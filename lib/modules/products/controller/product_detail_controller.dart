@@ -2,7 +2,7 @@ import 'package:bookstore_app/core/utils/snackbar_helper.dart';
 import 'package:bookstore_app/modules/cart/bloc/cart_bloc.dart';
 import 'package:bookstore_app/modules/products/bloc/product_bloc.dart';
 import 'package:bookstore_app/modules/products/model/product_model.dart';
-import 'package:bookstore_app/modules/wishlist/service/wishlist_service.dart';
+import 'package:bookstore_app/modules/wishlist/bloc/wishlist_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,12 +11,16 @@ class ProductDetailController {
 
   ProductDetailController({required this.context});
 
-  final _wishlistService = WishlistService();
-
   void fetchProduct(String id) {
     context.read<ProductBloc>().add(
       ProductEventFetchProductById(productId: id),
     );
+
+    // Also ensure Wishlist is loaded once if not already
+    final wishlistBloc = context.read<WishlistBloc>();
+    if (wishlistBloc.state is! WishlistStateLoaded) {
+      wishlistBloc.add(WishlistEventLoad());
+    }
   }
 
   void addToCart(ProductModel product) {
@@ -36,25 +40,17 @@ class ProductDetailController {
     }
   }
 
-  Future<void> toggleWishList(String productId, bool isWished) async {
+  void toggleWishList(String productId) {
     try {
-      if (isWished) {
-        await _wishlistService.removeFromWishlist(productId);
-      } else {
-        await _wishlistService.addToWishlist(productId);
-      }
-
-      final message = isWished ? 'Removed from wishlist' : 'Added to wishlist';
-      showSnackBar(context, message: message, type: SnackbarType.success);
+      context.read<WishlistBloc>().add(
+            WishlistEventToggle(productId: productId),
+          );
     } catch (e) {
       showSnackBar(
         context,
-        message: 'Failed to add/remove from wishlist',
+        message: 'Failed to toggle wishlist',
         type: SnackbarType.error,
       );
     }
   }
-
-  Future<bool> isWished(String productId) =>
-      _wishlistService.isProductWished(productId);
 }
