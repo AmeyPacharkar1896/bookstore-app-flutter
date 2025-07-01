@@ -37,11 +37,12 @@ class CartSummary extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: onCheckout,
+              onPressed: () => onCheckout(),
               icon: const Icon(Icons.payment),
               label: const Text('Proceed to Checkout'),
             ),
           ),
+
           const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,

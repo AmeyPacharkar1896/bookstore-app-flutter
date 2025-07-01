@@ -39,8 +39,7 @@ class CartEventClear extends CartEvent {}
 
 class CartEventCheckout extends CartEvent {
   final List<CartItemModel> items;
-  const CartEventCheckout({required this.items});
+  final Map<String, dynamic>? address;
 
-  @override
-  List<Object> get props => [items];
+  CartEventCheckout({required this.items, this.address});
 }

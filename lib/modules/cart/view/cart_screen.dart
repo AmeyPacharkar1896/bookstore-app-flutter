@@ -82,7 +82,7 @@ class CartScreen extends StatelessWidget {
                 ),
                 CartSummary(
                   total: total,
-                  onCheckout: () => controller.checkout(items),
+                  onCheckout: () => context.go('/checkout', extra: state.items),
                 ),
               ],
             );

@@ -1,8 +1,11 @@
 import 'package:bookstore_app/modules/account/view/account_screen.dart';
 import 'package:bookstore_app/modules/admin/view/admin_dashboard.dart';
 import 'package:bookstore_app/modules/auth/view/signup_screen.dart';
+import 'package:bookstore_app/modules/cart/model/cart_item_model.dart';
 import 'package:bookstore_app/modules/cart/view/cart_screen.dart';
 import 'package:bookstore_app/modules/category/view/category_screen.dart';
+import 'package:bookstore_app/modules/checkout/view/checkout_screen.dart';
+import 'package:bookstore_app/modules/checkout/view/order_success_screen.dart';
 import 'package:bookstore_app/modules/order/view/order_page.dart';
 import 'package:bookstore_app/modules/products/view/product_list_page.dart';
 import 'package:bookstore_app/modules/wishlist/view/wishlist_page.dart';
@@ -64,6 +67,17 @@ final GoRouter appRouter = GoRouter(
         final orderId = state.pathParameters['id']!;
         return OrderPage(userId: userId, orderId: orderId);
       },
+    ),
+    GoRoute(
+      path: '/checkout',
+      builder: (context, state) {
+        final items = state.extra as List<CartItemModel>;
+        return CheckoutScreen(items: items);
+      },
+    ),
+    GoRoute(
+      path: '/order-success',
+      builder: (context, state) => const OrderSuccessScreen(),
     ),
 
     GoRoute(

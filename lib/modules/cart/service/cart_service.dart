@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bookstore_app/modules/cart/model/cart_item_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -9,20 +7,22 @@ class CartService {
   Future<void> createOrder({
     required String userId,
     required List<CartItemModel> items,
+    Map<String, dynamic>? address,
   }) async {
     try {
       final total = items.fold(0.0, (sum, item) => sum + item.totalPrice);
-      log('[CartService] Creating order for user: $userId | Total: ₹$total');
 
-      final orderRes = await _client
-          .from('orders')
-          .insert({
-            'user_id': userId,
-            'total_amount': total,
-            'order_status': 'pending',
-          })
-          .select()
-          .single();
+      final orderRes =
+          await _client
+              .from('orders')
+              .insert({
+                'user_id': userId,
+                'total_amount': total,
+                'order_status': 'pending',
+                if (address != null) 'shipping_address': address,
+              })
+              .select()
+              .single();
 
       final orderId = orderRes['id'] as String;
 
@@ -33,12 +33,8 @@ class CartService {
           'quantity': item.quantity,
           'price': item.product.price,
         });
-        log('[CartService] Added item: ${item.product.title} x${item.quantity}');
       }
-
-      log('[CartService] Order completed.');
-    } catch (e, st) {
-      log('[CartService] Error: $e\n$st');
+    } catch (e) {
       throw Exception('Failed to place order. Please try again.');
     }
   }

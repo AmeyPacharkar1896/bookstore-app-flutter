@@ -23,14 +23,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final _authService = AuthService();
 
   Future<void> _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
+    print('🔁 AppStarted event received');
     emit(const AuthStateLoading());
+
     try {
       final user = await _authService.sessionValidation();
+      print('📦 sessionValidation returned: $user');
+
       user.fold(
-        (failure) => emit(AuthStateUnauthenticated()),
-        (user) => emit(AuthStateAuthenticated(user: user)),
+        (failure) {
+          print('❌ sessionValidation failed: $failure');
+          emit(AuthStateUnauthenticated());
+        },
+        (user) {
+          print('✅ Authenticated user: ${user.email}');
+          emit(AuthStateAuthenticated(user: user));
+        },
       );
     } catch (e) {
+      print('🔥 Exception in AppStarted: $e');
       emit(AuthStateError(message: e.toString()));
     }
   }

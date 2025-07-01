@@ -9,10 +9,9 @@ class CartController {
   CartController(this.context);
 
   void updateQuantity(String productId, int quantity) {
-    context.read<CartBloc>().add(CartEventUpdateQuantity(
-      productId: productId,
-      quantity: quantity,
-    ));
+    context.read<CartBloc>().add(
+      CartEventUpdateQuantity(productId: productId, quantity: quantity),
+    );
   }
 
   void removeFromCart(String productId) {
@@ -25,5 +24,14 @@ class CartController {
 
   void checkout(List<CartItemModel> items) {
     context.read<CartBloc>().add(CartEventCheckout(items: items));
+  }
+
+  void checkoutWithAddress(
+    List<CartItemModel> items,
+    Map<String, dynamic> address,
+  ) {
+    context.read<CartBloc>().add(
+      CartEventCheckout(items: items, address: address),
+    );
   }
 }

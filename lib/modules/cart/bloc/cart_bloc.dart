@@ -77,15 +77,14 @@ class CartBloc extends HydratedBloc<CartEvent, CartState> {
     }
 
     try {
-      await CartService().createOrder(userId: userId, items: event.items);
+      await CartService().createOrder(
+        userId: userId,
+        items: event.items,
+        address: event.address,
+      );
       emit(CartState(items: []));
     } catch (e) {
-      emit(
-        CartStateError(
-          message: e.toString().replaceAll('Exception: ', ''),
-          items: state.items,
-        ),
-      );
+      emit(CartStateError(message: e.toString(), items: state.items));
     }
   }
 
