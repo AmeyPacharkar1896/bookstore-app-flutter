@@ -1,5 +1,4 @@
 import 'package:bookstore_app/modules/account/view/account_screen.dart';
-import 'package:bookstore_app/modules/admin/view/admin_dashboard.dart';
 import 'package:bookstore_app/modules/auth/view/signup_screen.dart';
 import 'package:bookstore_app/modules/cart/model/cart_item_model.dart';
 import 'package:bookstore_app/modules/cart/view/cart_screen.dart';
@@ -24,11 +23,6 @@ final GoRouter appRouter = GoRouter(
       path: '/home',
       builder: (context, state) => const ProductListPage(),
     ),
-    GoRoute(
-      path: '/admin',
-      builder: (context, state) => const AdminDashboard(),
-    ),
-
     GoRoute(
       path: '/products/:id',
       builder: (context, state) {
