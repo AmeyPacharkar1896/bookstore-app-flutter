@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:bookstore_app/modules/auth/bloc/auth_bloc.dart';
 import 'package:bookstore_app/modules/common/interfaces/search_filter_controller.dart';
 import 'package:bookstore_app/modules/wishlist/bloc/wishlist_bloc.dart';
 import 'package:bookstore_app/modules/cart/bloc/cart_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class WishlistController implements SearchFilterController {
   final BuildContext context;
@@ -47,6 +49,11 @@ class WishlistController implements SearchFilterController {
   void onClearSearch() {
     searchController.clear();
     loadWishlist();
+  }
+
+  void logout(BuildContext context) {
+    context.read<AuthBloc>().add(AuthEventSignOut());
+    context.go('/login');
   }
 
   @override

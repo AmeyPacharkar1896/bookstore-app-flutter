@@ -44,11 +44,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           _controller.onFilterSortPressed(context, () => setState(() {}));
         },
       ),
-      drawer: AppDrawer(
-        onLogout: () {
-          // Can forward logout logic if needed
-        },
-      ),
+      drawer: AppDrawer(onLogout: () => _controller.logout(context)),
       body: BlocBuilder<WishlistBloc, WishlistState>(
         builder: (context, state) {
           if (state is WishlistStateLoading) {

@@ -1,6 +1,9 @@
+import 'package:bookstore_app/modules/auth/bloc/auth_bloc.dart';
 import 'package:bookstore_app/modules/common/interfaces/search_filter_controller.dart';
 import 'package:bookstore_app/modules/order/bloc/orders_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class OrdersController extends SearchFilterController {
   final OrdersBloc bloc;
@@ -51,6 +54,11 @@ class OrdersController extends SearchFilterController {
 
   void loadOrderDetails(String orderId) {
     bloc.add(OrdersEventLoadDetails(orderId: orderId));
+  }
+
+  void logout(BuildContext context) {
+    context.read<AuthBloc>().add(AuthEventSignOut());
+    context.go('/login');
   }
 
   @override
