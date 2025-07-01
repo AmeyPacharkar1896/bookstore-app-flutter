@@ -1,6 +1,6 @@
 # 📱 Bookstore E-commerce App (Flutter)
 
-![Bookstore App & Admin Demo](YOUR_DEMO_GIF_URL_HERE)
+![Bookstore App & Admin Demo](https://github.com/user-attachments/assets/ceea7a0c-1b1a-4af0-a6de-09da897c5b1f)
 
 This repository contains the **user-facing Flutter application** for a complete full-stack e-commerce platform. It provides a seamless mobile shopping experience, allowing users to browse products, manage a shopping cart, and complete a full checkout flow.
 
